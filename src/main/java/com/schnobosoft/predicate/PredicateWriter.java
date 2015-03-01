@@ -80,19 +80,10 @@ public class PredicateWriter
         }
 
         try {
-            writer.write("-----------------------------------");
-            writer.newLine();
-            writer.write(jcas.getDocumentText());
-            writer.newLine();
-            
+            writer.write(String.format("%s\t%s%s%n", jcas.getDocumentText(), particle, verb));
             if (verb == null) {
                 getLogger().warn("No predicate (finite verb) found!");
             }
-            else {
-                writer.write(String.format("Predicate:\t%s%s%n", particle, verb));
-            }
-            writer.write("-----------------------------------");
-            writer.newLine();
         }
         catch (IOException e) {
             throw new AnalysisEngineProcessException(e);
