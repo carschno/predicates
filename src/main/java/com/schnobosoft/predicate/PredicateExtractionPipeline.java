@@ -10,6 +10,7 @@ import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 
+import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 
@@ -36,9 +37,10 @@ public class PredicateExtractionPipeline
 
         AnalysisEngineDescription segmenter = createEngineDescription(OpenNlpSegmenter.class);
         AnalysisEngineDescription postagger = createEngineDescription(StanfordPosTagger.class);
+        AnalysisEngineDescription lemmatizer = createEngineDescription(MateLemmatizer.class);
         AnalysisEngineDescription predicatePrinter = createEngineDescription(PredicateWriter.class);
 
-        SimplePipeline.runPipeline(reader, segmenter, postagger, predicatePrinter);
+        SimplePipeline.runPipeline(reader, segmenter, postagger, lemmatizer, predicatePrinter);
     }
 
 }

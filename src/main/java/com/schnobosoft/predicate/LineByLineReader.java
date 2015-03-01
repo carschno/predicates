@@ -36,11 +36,6 @@ public class LineByLineReader
     private BufferedReader reader;
     private Iterator<String> lineIterator;
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see org.apache.uima.collection.CollectionReader_ImplBase#initialize()
-     */
     @Override
     public void initialize(UimaContext context)
         throws ResourceInitializationException
@@ -56,11 +51,6 @@ public class LineByLineReader
         }
     };
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see org.apache.uima.collection.CollectionReader#getNext(org.apache.uima.cas.CAS)
-     */
     public void getNext(CAS arg0)
         throws IOException, CollectionException
     {
