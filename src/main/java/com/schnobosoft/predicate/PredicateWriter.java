@@ -3,11 +3,20 @@ package com.schnobosoft.predicate;
 import static org.apache.uima.fit.util.JCasUtil.select;
 import static org.apache.uima.fit.util.JCasUtil.selectCovered;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
+import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasConsumer_ImplBase;
+import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.resource.ResourceInitializationException;
 
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
+import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 
 /**
@@ -17,19 +26,43 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 public class PredicateWriter
     extends JCasConsumer_ImplBase
 {
-
     private static final String PRED_POS_TAG = "VVFIN";
     private static final String PARTICLE_POS_TAG = "PTKVZ";
 
+    public static final String PARAM_TARGET_LOCATION = ComponentParameters.PARAM_TARGET_LOCATION;
+    @ConfigurationParameter(name = PARAM_TARGET_LOCATION, mandatory = false)
+    private String targetLocation;
+
+    private BufferedWriter writer;
+
     @Override
-    public void process(JCas arg0)
+    public void initialize(UimaContext context)
+        throws ResourceInitializationException
+    {
+        super.initialize(context);
+
+        if (targetLocation == null) {
+            writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        }
+        else {
+            try {
+                writer = new BufferedWriter(new FileWriter(targetLocation));
+            }
+            catch (IOException e) {
+                throw new ResourceInitializationException(e);
+            }
+        }
+    };
+
+    @Override
+    public void process(JCas jcas)
         throws AnalysisEngineProcessException
     {
-        System.out.println(arg0.getDocumentText());
+
         String verb = null;
         String particle = "";
 
-        for (POS pos : select(arg0, POS.class)) {
+        for (POS pos : select(jcas, POS.class)) {
             getLogger().debug(String.format("%s\t%s", pos.getCoveredText(), pos.getPosValue()));
 
             if (pos.getPosValue().equals(PRED_POS_TAG)) {
@@ -45,7 +78,37 @@ public class PredicateWriter
                 }
             }
         }
-        System.out.printf("%s%s%n", particle, verb);
-        System.out.println("-----------------------------------");
+
+        try {
+            writer.write("-----------------------------------");
+            writer.newLine();
+            writer.write(jcas.getDocumentText());
+            writer.newLine();
+            
+            if (verb == null) {
+                getLogger().warn("No predicate (finite verb) found!");
+            }
+            else {
+                writer.write(String.format("Predicate:\t%s%s%n", particle, verb));
+            }
+            writer.write("-----------------------------------");
+            writer.newLine();
+        }
+        catch (IOException e) {
+            throw new AnalysisEngineProcessException(e);
+        }
+    }
+
+    @Override
+    public void collectionProcessComplete()
+        throws AnalysisEngineProcessException
+    {
+        super.collectionProcessComplete();
+        try {
+            writer.close();
+        }
+        catch (IOException e) {
+            throw new AnalysisEngineProcessException(e);
+        }
     }
 }
