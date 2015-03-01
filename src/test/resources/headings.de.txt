@@ -4,4 +4,4 @@ OpenNMS führt kommerzielle Version ein
 Red Hat startet OpenShift Commons
 Google gibt RPC-Framework für HTTP/2 frei
 Docker veröffentlicht Deployment- und Orchestrierungstools
-Europol macht Botnetz "Ramnit" dicht 
+Europol macht Botnetz "Ramnit" dicht
