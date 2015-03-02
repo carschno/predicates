@@ -8,12 +8,48 @@
 	<repositories>
 		<repository>
 			<id>ukp-oss-model-releases</id>
-			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-model-releases-local</url>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-model-releases-local/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>ukp-oss-releases</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ukp-oss-snapshots</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ukp-oss-releases</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -58,7 +94,8 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
