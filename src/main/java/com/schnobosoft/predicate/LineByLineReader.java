@@ -51,11 +51,11 @@ public class LineByLineReader
         }
     };
 
-    public void getNext(CAS arg0)
+    public void getNext(CAS cas)
         throws IOException, CollectionException
     {
-        arg0.setDocumentText(lineIterator.next());
-        arg0.setDocumentLanguage(language);
+        cas.setDocumentText(lineIterator.next());
+        cas.setDocumentLanguage(language);
     }
 
     public void close()
