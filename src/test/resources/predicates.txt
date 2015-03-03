@@ -1,0 +1,7 @@
+Xen-Bugs erfordern Cloud-Reboots bei Amazon und Rackspace	erfordern
+Huawei baut 5G-Testbett in München	bauen
+OpenNMS führt kommerzielle Version ein	einführen
+Red Hat startet OpenShift Commons	starten
+Google gibt RPC-Framework für HTTP/2 frei	geben
+Docker veröffentlicht Deployment- und Orchestrierungstools	veröffentlichen
+Europol macht Botnetz "Ramnit" dicht	machen
