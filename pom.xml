@@ -139,7 +139,7 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
 					<configuration>
-						<mainClass>com.schnobosoft.predicate.PredicateExtractionPipeline</mainClass>
+					   <mainClass>com.schnobosoft.predicate.PredicateExtractionPipeline</mainClass>
 					</configuration>
 				</plugin>
 			</plugins>
