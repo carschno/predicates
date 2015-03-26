@@ -50,9 +50,8 @@ public class DependencyBasedPredicateWriter
                 }
             }
         }
-        System.out.println(particle + verb);
         try {
-            getWriter().write(particle + verb + "\n");
+            getWriter().write(String.format("%s\t%s%s%n", aJCas.getDocumentText(), particle, verb));
         }
         catch (IOException e) {
             throw new AnalysisEngineProcessException(e);
