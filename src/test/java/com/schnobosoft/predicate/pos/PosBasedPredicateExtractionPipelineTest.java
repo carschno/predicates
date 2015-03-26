@@ -1,4 +1,4 @@
-package com.schnobosoft.predicate;
+package com.schnobosoft.predicate.pos;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
@@ -14,6 +14,10 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 import org.junit.Test;
 
+import com.schnobosoft.predicate.PredicateWriter;
+import com.schnobosoft.predicate.io.LineByLineReader;
+import com.schnobosoft.predicate.pos.PosBasedPredicateWriter;
+
 import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
@@ -24,7 +28,7 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
  * @author Carsten Schnober
  *
  */
-public class PredicateExtractionPipelineTest
+public class PosBasedPredicateExtractionPipelineTest
 {
     @Test
     public void testPipeline()
@@ -41,7 +45,8 @@ public class PredicateExtractionPipelineTest
         AnalysisEngineDescription segmenter = createEngineDescription(OpenNlpSegmenter.class);
         AnalysisEngineDescription postagger = createEngineDescription(StanfordPosTagger.class);
         AnalysisEngineDescription lemmatizer = createEngineDescription(MateLemmatizer.class);
-        AnalysisEngineDescription predicatePrinter = createEngineDescription(PredicateWriter.class,
+        AnalysisEngineDescription predicatePrinter = createEngineDescription(
+                PosBasedPredicateWriter.class,
                 PredicateWriter.PARAM_TARGET_LOCATION, output);
 
         SimplePipeline.runPipeline(reader, segmenter, postagger, lemmatizer, predicatePrinter);
