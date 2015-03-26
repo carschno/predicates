@@ -29,7 +29,7 @@ public class PredicateExtractionPipeline
         DEPENDENCY, POS
     };
 
-    private static final METHOD method = METHOD.POS;
+    private static final METHOD method = METHOD.DEPENDENCY;
 
     public static void main(String[] args)
         throws UIMAException, IOException

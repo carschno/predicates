@@ -8,7 +8,10 @@ import java.util.List;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
 import org.apache.uima.jcas.JCas;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.schnobosoft.predicate.pos.PosBasedPredicateAnnotator;
 import com.schnobosoft.predicate.type.Predicate;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
@@ -19,22 +22,25 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 public class DependencyBasedPredicateAnnotator
     extends JCasAnnotator_ImplBase
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PosBasedPredicateAnnotator.class);
     private static final String PARTICLE_TYPE = "SVP";
 
     @Override
     public void process(JCas aJCas)
         throws AnalysisEngineProcessException
     {
-        String verb = null;
-        String particle = "";
-        Predicate predicate = new Predicate(aJCas);
 
         for (Sentence sentence : select(aJCas, Sentence.class)) {
+            Predicate predicate = new Predicate(aJCas);
+            boolean hasPredicate = false;
+            boolean hasParticle = false;
+
             for (Token token : selectCovered(Token.class, sentence)) {
                 List<Dependency> dependencies = selectCovered(Dependency.class, token);
                 if (dependencies.isEmpty()) {
+                    assert !hasPredicate;
+                    hasPredicate = true;
                     for (Lemma lemma : selectCovered(Lemma.class, token)) {
-                        assert verb == null;
                         predicate.setVerbLemma(lemma.getValue());
                         predicate.setVerbBegin(token.getBegin());
                         predicate.setVerbEnd(token.getEnd());
@@ -43,7 +49,8 @@ public class DependencyBasedPredicateAnnotator
                 else {
                     for (Dependency dep : dependencies) {
                         if (dep.getDependencyType().equals(PARTICLE_TYPE)) {
-                            assert particle.isEmpty();
+                            assert !hasParticle;
+                            hasParticle = false;
                             predicate.setHasParticle(true);
                             predicate.setParticleBegin(token.getBegin());
                             predicate.setParticleEnd(token.getEnd());
@@ -52,7 +59,12 @@ public class DependencyBasedPredicateAnnotator
                     }
                 }
             }
-            predicate.addToIndexes(aJCas);
+            if (hasPredicate) {
+                predicate.addToIndexes(aJCas);
+            }
+            else {
+                LOGGER.warn("No predicate found for sentence:\n" + sentence.getCoveredText());
+            }
         }
     }
 
