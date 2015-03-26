@@ -4,6 +4,8 @@ import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDesc
 import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
@@ -38,26 +40,27 @@ public class PredicateExtractionPipeline
                 LineByLineReader.PARAM_LANGUAGE, "de",
                 LineByLineReader.PARAM_SOURCE_LOCATION, headings);
 
-        AnalysisEngineDescription segmenter = createEngineDescription(OpenNlpSegmenter.class);
-        AnalysisEngineDescription postagger = createEngineDescription(StanfordPosTagger.class);
-        AnalysisEngineDescription lemmatizer = createEngineDescription(MateLemmatizer.class);
-        AnalysisEngineDescription parser = createEngineDescription(MateParser.class);
-        AnalysisEngineDescription writer = createEngineDescription(PredicateWriter.class);
+        List<AnalysisEngineDescription> aEngines = new ArrayList<>();
 
-        AnalysisEngineDescription predicateExtractor;
+        aEngines.add(createEngineDescription(OpenNlpSegmenter.class));
+        aEngines.add(createEngineDescription(StanfordPosTagger.class));
+        aEngines.add(createEngineDescription(MateLemmatizer.class));
+
         switch (method) {
         case DEPENDENCY:
-            predicateExtractor = createEngineDescription(DependencyBasedPredicateAnnotator.class);
+            aEngines.add(createEngineDescription(MateParser.class));
+            aEngines.add(createEngineDescription(DependencyBasedPredicateAnnotator.class));
             break;
         case POS:
-            predicateExtractor = createEngineDescription(PosBasedPredicateAnnotator.class);
+            aEngines.add(createEngineDescription(PosBasedPredicateAnnotator.class));
             break;
         default:
             throw new IllegalStateException();
         }
+        aEngines.add(createEngineDescription(PredicateWriter.class));
 
-        SimplePipeline.runPipeline(reader, segmenter, postagger, lemmatizer, parser,
-                predicateExtractor, writer);
+        SimplePipeline.runPipeline(reader,
+                aEngines.toArray(new AnalysisEngineDescription[aEngines.size()]));
 
     }
 }
