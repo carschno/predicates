@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 
-import com.schnobosoft.predicate.PredicateWriter;
+import com.schnobosoft.predicate.io.PredicateWriter;
 
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;

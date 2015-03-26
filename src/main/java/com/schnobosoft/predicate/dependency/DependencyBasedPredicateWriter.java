@@ -10,7 +10,7 @@ import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.text.AnnotationFS;
 import org.apache.uima.jcas.JCas;
 
-import com.schnobosoft.predicate.PredicateWriter;
+import com.schnobosoft.predicate.io.PredicateWriter;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
@@ -27,8 +27,10 @@ public class DependencyBasedPredicateWriter
 {
     private static final String PARTICLE_TYPE = "SVP";
 
-    @Override
-    public void process(JCas aJCas)
+
+
+    @Deprecated
+    public void processOld(JCas aJCas)
         throws AnalysisEngineProcessException
     {
         String verb = null;

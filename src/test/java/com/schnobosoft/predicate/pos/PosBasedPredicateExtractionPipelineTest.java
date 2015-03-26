@@ -14,8 +14,8 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 import org.junit.Test;
 
-import com.schnobosoft.predicate.PredicateWriter;
 import com.schnobosoft.predicate.io.LineByLineReader;
+import com.schnobosoft.predicate.io.PredicateWriter;
 import com.schnobosoft.predicate.pos.PosBasedPredicateWriter;
 
 import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;

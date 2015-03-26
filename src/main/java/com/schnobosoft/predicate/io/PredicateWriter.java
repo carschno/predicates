@@ -1,4 +1,7 @@
-package com.schnobosoft.predicate;
+package com.schnobosoft.predicate.io;
+
+import static org.apache.uima.fit.util.JCasUtil.select;
+import static org.apache.uima.fit.util.JCasUtil.selectCovered;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -9,15 +12,19 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasConsumer_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import com.schnobosoft.predicate.type.Predicate;
+
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 
 /**
  * @author Carsten Schnober
  *
  */
-public abstract class PredicateWriter
+public class PredicateWriter
     extends JCasConsumer_ImplBase
 {
 
@@ -59,7 +66,29 @@ public abstract class PredicateWriter
         }
     }
 
+    @Override
+    public void process(JCas aJCas)
+        throws AnalysisEngineProcessException
+    {
+        for (Sentence sentence : select(aJCas, Sentence.class)) {
+            for (Predicate predicate : selectCovered(Predicate.class, sentence)) {
+                StringBuffer p = new StringBuffer();
+                if (predicate.getHasParticle()) {
+                    p.append(predicate.getParticleText());
+                }
+                p.append(predicate.getVerbLemma());
 
+                try {
+                    writer.write(String.format("%s\t%s%n", aJCas.getDocumentText(), p.toString()));
+                }
+                catch (IOException e) {
+                    throw new AnalysisEngineProcessException(e);
+                }
+            }
+        }
+    }
+
+    @Deprecated
     public BufferedWriter getWriter()
     {
         return writer;

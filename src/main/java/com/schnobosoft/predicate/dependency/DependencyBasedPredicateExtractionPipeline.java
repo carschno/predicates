@@ -11,6 +11,7 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 
 import com.schnobosoft.predicate.io.LineByLineReader;
+import com.schnobosoft.predicate.io.PredicateWriter;
 
 import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.matetools.MateParser;
@@ -43,9 +44,10 @@ public class DependencyBasedPredicateExtractionPipeline
         AnalysisEngineDescription postagger = createEngineDescription(StanfordPosTagger.class);
         AnalysisEngineDescription lemmatizer = createEngineDescription(MateLemmatizer.class);
         AnalysisEngineDescription parser = createEngineDescription(MateParser.class);
-        AnalysisEngineDescription predicatePrinter = createEngineDescription(DependencyBasedPredicateWriter.class);
+        AnalysisEngineDescription predicateExtractor = createEngineDescription(DependencyBasedPredicateAnnotator.class);
+        AnalysisEngineDescription writer = createEngineDescription(PredicateWriter.class);
 
         SimplePipeline.runPipeline(reader, segmenter, postagger, lemmatizer, parser,
-                predicatePrinter);
+                predicateExtractor, writer);
     }
 }
