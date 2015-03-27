@@ -6,8 +6,7 @@ import static org.apache.uima.fit.util.JCasUtil.selectCovered;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.uima.util.Level;
 
 import com.schnobosoft.predicate.type.Predicate;
 
@@ -24,7 +23,6 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 public class PosBasedPredicateAnnotator
     extends JCasAnnotator_ImplBase
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PosBasedPredicateAnnotator.class);
     private static final String PRED_POS_TAG = "VVFIN";
     private static final String PARTICLE_POS_TAG = "PTKVZ";
 
@@ -60,7 +58,8 @@ public class PosBasedPredicateAnnotator
                 predicate.addToIndexes(jcas);
             }
             else {
-                LOGGER.warn("No predicate found for sentence:\n" + sentence.getCoveredText());
+                getContext().getLogger().log(Level.WARNING,
+                        "No predicate found for sentence:\n" + sentence.getCoveredText());
             }
         }
     }
