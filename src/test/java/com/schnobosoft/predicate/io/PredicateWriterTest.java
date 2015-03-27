@@ -71,4 +71,29 @@ public class PredicateWriterTest
         assertEquals(expectedOutput, FileUtils.readFileToString(targetFile));
     }
 
+    @Test
+    public void testNoLemma()
+        throws UIMAException, IOException
+    {
+        File targetFile = new File("target/writeroutput_nolemma.txt");
+        targetFile.deleteOnExit();
+        String sentence = "Ich gehe nach Hause.";
+        String expectedOutput = sentence + "\tgehe\n";
+
+        CollectionReaderDescription reader = createReaderDescription(StringReader.class,
+                StringReader.PARAM_LANGUAGE, "de",
+                StringReader.PARAM_DOCUMENT_TEXT, sentence);
+
+        AnalysisEngineDescription segmenter = createEngineDescription(OpenNlpSegmenter.class);
+        AnalysisEngineDescription postagger = createEngineDescription(StanfordPosTagger.class);
+        AnalysisEngineDescription lemmatizer = createEngineDescription(MateLemmatizer.class);
+        AnalysisEngineDescription predicator = createEngineDescription(PosBasedPredicateAnnotator.class);
+        AnalysisEngineDescription writer = createEngineDescription(PredicateWriter.class,
+                PredicateWriter.PARAM_TARGET_LOCATION, targetFile,
+                PredicateWriter.PARAM_USE_LEMMA, false);
+
+        SimplePipeline.runPipeline(reader, segmenter, postagger, lemmatizer, predicator, writer);
+        assertEquals(expectedOutput, FileUtils.readFileToString(targetFile));
+    }
+
 }
