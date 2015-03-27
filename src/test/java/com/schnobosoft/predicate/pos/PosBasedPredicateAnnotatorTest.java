@@ -34,7 +34,6 @@ public class PosBasedPredicateAnnotatorTest
         throws ResourceInitializationException
     {
         String sentence = "Ich gehe nach Hause .";
-        String expectedPredicateLemma = "gehen";
         short expectedPredicates = 1;
         short expectedBegin = 4;
         short expectedEnd = 8;
@@ -55,7 +54,6 @@ public class PosBasedPredicateAnnotatorTest
                 predicatesFound++;
 
                 /* test for verb */
-                assertEquals(expectedPredicateLemma, predicate.getVerbLemma());
                 assertEquals(expectedBegin, predicate.getVerbBegin());
                 assertEquals(expectedEnd, predicate.getVerbEnd());
 
@@ -71,11 +69,9 @@ public class PosBasedPredicateAnnotatorTest
         throws ResourceInitializationException
     {
         String sentence = "Ich mache die Tür auf .";
-        String expectedPredicateLemma = "machen";
         short expectedPredicates = 1;
         short expectedBegin = 4;
         short expectedEnd = 9;
-        String expectedParticle = "auf";
         short expectedParticleBegin = 18;
         short expectedParticleEnd = 21;
 
@@ -95,7 +91,6 @@ public class PosBasedPredicateAnnotatorTest
                 predicatesFound++;
 
                 /* test for verb */
-                assertEquals(expectedPredicateLemma, predicate.getVerbLemma());
                 assertEquals(expectedBegin, predicate.getVerbBegin());
                 assertEquals(expectedEnd, predicate.getVerbEnd());
 
@@ -103,7 +98,6 @@ public class PosBasedPredicateAnnotatorTest
                 assertTrue(predicate.getHasParticle());
                 assertEquals(expectedParticleBegin, predicate.getParticleBegin());
                 assertEquals(expectedParticleEnd, predicate.getParticleEnd());
-                assertEquals(expectedParticle, predicate.getParticleText());
             }
             assertEquals(expectedPredicates, predicatesFound);
         }

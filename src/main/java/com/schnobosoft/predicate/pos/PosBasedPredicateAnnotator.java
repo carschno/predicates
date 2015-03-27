@@ -11,11 +11,13 @@ import org.apache.uima.util.Level;
 import com.schnobosoft.predicate.type.Predicate;
 
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 
 /**
  * Annotate predicates for each sentence based on part-of-speech tags.
+ * <p>
+ * This annotator requires that sentences, tokens, and POS tags have been annotated by previous
+ * annotators in the pipeline.
  *
  * @author Carsten Schnober
  *
@@ -36,22 +38,20 @@ public class PosBasedPredicateAnnotator
             boolean hasParticle = false;
 
             for (POS pos : selectCovered(POS.class, sentence)) {
+                /* find finite verb */
                 if (pos.getPosValue().equals(PRED_POS_TAG)) {
                     assert !hasPredicate;
                     hasPredicate = true;
-                    for (Lemma lemma : selectCovered(Lemma.class, pos)) {
-                        predicate.setVerbBegin(pos.getBegin());
-                        predicate.setVerbEnd(pos.getEnd());
-                        predicate.setVerbLemma(lemma.getValue());
-                    }
+                    predicate.setVerbBegin(pos.getBegin());
+                    predicate.setVerbEnd(pos.getEnd());
                 }
+                /* find particle */
                 else if (pos.getPosValue().equals(PARTICLE_POS_TAG)) {
                     assert !hasParticle;
                     hasParticle = true;
                     predicate.setHasParticle(true);
                     predicate.setParticleBegin(pos.getBegin());
                     predicate.setParticleEnd(pos.getEnd());
-                    predicate.setParticleText(pos.getCoveredText());
                 }
             }
             if (hasPredicate) {

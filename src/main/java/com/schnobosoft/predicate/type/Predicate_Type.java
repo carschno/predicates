@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu Mar 26 18:36:54 CET 2015
+ * Updated by JCasGen Fri Mar 27 10:28:55 CET 2015
  * @generated */
 public class Predicate_Type extends Annotation_Type {
   /** @generated 
@@ -45,30 +45,6 @@ public class Predicate_Type extends Annotation_Type {
      @modifiable */
   @SuppressWarnings ("hiding")
   public final static boolean featOkTst = JCasRegistry.getFeatOkTst("com.schnobosoft.predicate.type.Predicate");
- 
-  /** @generated */
-  final Feature casFeat_VerbLemma;
-  /** @generated */
-  final int     casFeatCode_VerbLemma;
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @return the feature value 
-   */ 
-  public String getVerbLemma(int addr) {
-        if (featOkTst && casFeat_VerbLemma == null)
-      jcas.throwFeatMissing("VerbLemma", "com.schnobosoft.predicate.type.Predicate");
-    return ll_cas.ll_getStringValue(addr, casFeatCode_VerbLemma);
-  }
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @param v value to set 
-   */    
-  public void setVerbLemma(int addr, String v) {
-        if (featOkTst && casFeat_VerbLemma == null)
-      jcas.throwFeatMissing("VerbLemma", "com.schnobosoft.predicate.type.Predicate");
-    ll_cas.ll_setStringValue(addr, casFeatCode_VerbLemma, v);}
-    
-  
  
   /** @generated */
   final Feature casFeat_VerbBegin;
@@ -143,30 +119,6 @@ public class Predicate_Type extends Annotation_Type {
   
  
   /** @generated */
-  final Feature casFeat_ParticleText;
-  /** @generated */
-  final int     casFeatCode_ParticleText;
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @return the feature value 
-   */ 
-  public String getParticleText(int addr) {
-        if (featOkTst && casFeat_ParticleText == null)
-      jcas.throwFeatMissing("ParticleText", "com.schnobosoft.predicate.type.Predicate");
-    return ll_cas.ll_getStringValue(addr, casFeatCode_ParticleText);
-  }
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @param v value to set 
-   */    
-  public void setParticleText(int addr, String v) {
-        if (featOkTst && casFeat_ParticleText == null)
-      jcas.throwFeatMissing("ParticleText", "com.schnobosoft.predicate.type.Predicate");
-    ll_cas.ll_setStringValue(addr, casFeatCode_ParticleText, v);}
-    
-  
- 
-  /** @generated */
   final Feature casFeat_ParticleBegin;
   /** @generated */
   final int     casFeatCode_ParticleBegin;
@@ -226,10 +178,6 @@ public class Predicate_Type extends Annotation_Type {
     casImpl.getFSClassRegistry().addGeneratorForType((TypeImpl)this.casType, getFSGenerator());
 
  
-    casFeat_VerbLemma = jcas.getRequiredFeatureDE(casType, "VerbLemma", "uima.cas.String", featOkTst);
-    casFeatCode_VerbLemma  = (null == casFeat_VerbLemma) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_VerbLemma).getCode();
-
- 
     casFeat_VerbBegin = jcas.getRequiredFeatureDE(casType, "VerbBegin", "uima.cas.Integer", featOkTst);
     casFeatCode_VerbBegin  = (null == casFeat_VerbBegin) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_VerbBegin).getCode();
 
@@ -240,10 +188,6 @@ public class Predicate_Type extends Annotation_Type {
  
     casFeat_hasParticle = jcas.getRequiredFeatureDE(casType, "hasParticle", "uima.cas.Boolean", featOkTst);
     casFeatCode_hasParticle  = (null == casFeat_hasParticle) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_hasParticle).getCode();
-
- 
-    casFeat_ParticleText = jcas.getRequiredFeatureDE(casType, "ParticleText", "uima.cas.String", featOkTst);
-    casFeatCode_ParticleText  = (null == casFeat_ParticleText) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_ParticleText).getCode();
 
  
     casFeat_ParticleBegin = jcas.getRequiredFeatureDE(casType, "ParticleBegin", "uima.cas.Integer", featOkTst);

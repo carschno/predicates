@@ -18,6 +18,7 @@ import org.apache.uima.resource.ResourceInitializationException;
 import com.schnobosoft.predicate.type.Predicate;
 
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 
 /**
@@ -27,10 +28,13 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 public class PredicateWriter
     extends JCasConsumer_ImplBase
 {
-
     public static final String PARAM_TARGET_LOCATION = ComponentParameters.PARAM_TARGET_LOCATION;
     @ConfigurationParameter(name = PARAM_TARGET_LOCATION, mandatory = false)
     private String targetLocation;
+
+    public static final String PARAM_USE_LEMMA = "useLemma";
+    @ConfigurationParameter(name = PARAM_USE_LEMMA, mandatory = true, defaultValue = "true")
+    private boolean useLemma;
 
     private BufferedWriter writer;
 
@@ -72,14 +76,9 @@ public class PredicateWriter
     {
         for (Sentence sentence : select(aJCas, Sentence.class)) {
             for (Predicate predicate : selectCovered(Predicate.class, sentence)) {
-                StringBuffer p = new StringBuffer();
-                if (predicate.getHasParticle()) {
-                    p.append(predicate.getParticleText());
-                }
-                p.append(predicate.getVerbLemma());
-
+                String text = predicateText(aJCas, predicate);
                 try {
-                    writer.write(String.format("%s\t%s%n", aJCas.getDocumentText(), p.toString()));
+                    writer.write(String.format("%s\t%s%n", sentence.getCoveredText(), text));
                 }
                 catch (IOException e) {
                     throw new AnalysisEngineProcessException(e);
@@ -88,9 +87,62 @@ public class PredicateWriter
         }
     }
 
-    @Deprecated
-    public BufferedWriter getWriter()
+    /**
+     * Generate the text for the given predicate by concatenating the particle (if applicable) and
+     * the verb lemma (or the original text).
+     *
+     * @param aJCas
+     * @param predicate
+     * @return a String containing the predicate
+     */
+    private String predicateText(JCas aJCas, Predicate predicate)
     {
-        return writer;
+        StringBuffer p = new StringBuffer();
+
+        /* get particle text */
+        if (predicate.getHasParticle()) {
+            p.append(aJCas.getDocumentText().substring(
+                    predicate.getParticleBegin(), predicate.getParticleEnd()));
+        }
+
+        /* get finite verb lemma or text */
+        if (useLemma) {
+            Lemma lemma = findLemma(aJCas, predicate.getVerbBegin(), predicate.getVerbEnd());
+            if (lemma == null) {
+                getLogger().warn("No matching lemma found. Using original text instead.");
+                p.append(aJCas.getDocumentText().substring(
+                        predicate.getVerbBegin(), predicate.getVerbEnd()));
+            }
+            else {
+                p.append(lemma.getValue());
+            }
+        }
+        else {
+            p.append(aJCas.getDocumentText().substring(
+                    predicate.getVerbBegin(), predicate.getVerbEnd()));
+        }
+        return p.toString();
+    }
+
+    /**
+     * Find the lemma matching the given offsets.
+     *
+     * @param aJCas
+     * @param begin
+     *            the begin offset
+     * @param end
+     *            the end offset
+     * @return the lemma starting end ending exactly at the given offsets.
+     */
+    private Lemma findLemma(JCas aJCas, int begin, int end)
+    {
+        Lemma result = null;
+        for (Lemma lemma : select(aJCas, Lemma.class)) {
+            if (lemma.getBegin() == begin && lemma.getEnd() == end) {
+                result = lemma;
+                break;
+            }
+        }
+        return result;
     }
 }

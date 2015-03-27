@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Thu Mar 26 18:36:54 CET 2015
+ * Updated by JCasGen Fri Mar 27 10:28:55 CET 2015
  * XML source: /home/schnober/git/predicates/src/main/resources/com/schnobosoft/predicate/type/Predicate.xml
  * @generated */
 public class Predicate extends Annotation {
@@ -77,28 +77,6 @@ public class Predicate extends Annotation {
  
     
   //*--------------*
-  //* Feature: VerbLemma
-
-  /** getter for VerbLemma - gets 
-   * @generated
-   * @return value of the feature 
-   */
-  public String getVerbLemma() {
-    if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_VerbLemma == null)
-      jcasType.jcas.throwFeatMissing("VerbLemma", "com.schnobosoft.predicate.type.Predicate");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Predicate_Type)jcasType).casFeatCode_VerbLemma);}
-    
-  /** setter for VerbLemma - sets  
-   * @generated
-   * @param v value to set into the feature 
-   */
-  public void setVerbLemma(String v) {
-    if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_VerbLemma == null)
-      jcasType.jcas.throwFeatMissing("VerbLemma", "com.schnobosoft.predicate.type.Predicate");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Predicate_Type)jcasType).casFeatCode_VerbLemma, v);}    
-   
-    
-  //*--------------*
   //* Feature: VerbBegin
 
   /** getter for VerbBegin - gets 
@@ -162,28 +140,6 @@ public class Predicate extends Annotation {
     if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_hasParticle == null)
       jcasType.jcas.throwFeatMissing("hasParticle", "com.schnobosoft.predicate.type.Predicate");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((Predicate_Type)jcasType).casFeatCode_hasParticle, v);}    
-   
-    
-  //*--------------*
-  //* Feature: ParticleText
-
-  /** getter for ParticleText - gets 
-   * @generated
-   * @return value of the feature 
-   */
-  public String getParticleText() {
-    if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_ParticleText == null)
-      jcasType.jcas.throwFeatMissing("ParticleText", "com.schnobosoft.predicate.type.Predicate");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Predicate_Type)jcasType).casFeatCode_ParticleText);}
-    
-  /** setter for ParticleText - sets  
-   * @generated
-   * @param v value to set into the feature 
-   */
-  public void setParticleText(String v) {
-    if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_ParticleText == null)
-      jcasType.jcas.throwFeatMissing("ParticleText", "com.schnobosoft.predicate.type.Predicate");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Predicate_Type)jcasType).casFeatCode_ParticleText, v);}    
    
     
   //*--------------*

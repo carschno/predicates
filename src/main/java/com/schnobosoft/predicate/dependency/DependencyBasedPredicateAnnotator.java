@@ -12,13 +12,15 @@ import org.apache.uima.util.Level;
 
 import com.schnobosoft.predicate.type.Predicate;
 
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 
 /**
  * Annotate predicates for each sentence based on dependency syntax parses.
+ * <p>
+ * This annotator requires that sentences, tokens, and dependencies have been annotated by previous
+ * annotators in the pipeline.
  *
  * @author Carsten Schnober
  *
@@ -40,19 +42,15 @@ public class DependencyBasedPredicateAnnotator
             for (Token token : selectCovered(Token.class, sentence)) {
                 List<Dependency> dependencies = selectCovered(Dependency.class, token);
 
-                System.out.println(token);
-                System.out.println(dependencies);
-
+                /* find root node */
                 if (dependencies.isEmpty()) {
                     assert !hasPredicate;
                     hasPredicate = true;
-                    for (Lemma lemma : selectCovered(Lemma.class, token)) {
-                        predicate.setVerbLemma(lemma.getValue());
-                        predicate.setVerbBegin(token.getBegin());
-                        predicate.setVerbEnd(token.getEnd());
-                    }
+                    predicate.setVerbBegin(token.getBegin());
+                    predicate.setVerbEnd(token.getEnd());
                 }
                 else {
+                    /* find particle */
                     for (Dependency dep : dependencies) {
                         if (dep.getDependencyType().equals(PARTICLE_TYPE)) {
                             assert !hasParticle;
@@ -60,7 +58,6 @@ public class DependencyBasedPredicateAnnotator
                             predicate.setHasParticle(true);
                             predicate.setParticleBegin(token.getBegin());
                             predicate.setParticleEnd(token.getEnd());
-                            predicate.setParticleText(token.getCoveredText());
                         }
                     }
                 }

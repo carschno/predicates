@@ -35,7 +35,6 @@ public class DependencyBasedPredicateAnnotatorTest
         throws ResourceInitializationException
     {
         String sentence = "Ich gehe nach Hause .";
-        String expectedPredicateLemma = "gehen";
         short expectedPredicates = 1;
         short expectedBegin = 4;
         short expectedEnd = 8;
@@ -57,7 +56,6 @@ public class DependencyBasedPredicateAnnotatorTest
                 predicatesFound++;
 
                 /* test verb */
-                assertEquals(expectedPredicateLemma, predicate.getVerbLemma());
                 assertEquals(expectedBegin, predicate.getVerbBegin());
                 assertEquals(expectedEnd, predicate.getVerbEnd());
 
@@ -73,11 +71,9 @@ public class DependencyBasedPredicateAnnotatorTest
         throws ResourceInitializationException
     {
         String sentence = "Ich mache die Tür auf .";
-        String expectedPredicateLemma = "machen";
         short expectedPredicates = 1;
         short expectedBegin = 4;
         short expectedEnd = 9;
-        String expectedParticle = "auf";
         short expectedParticleBegin = 18;
         short expectedParticleEnd = 21;
 
@@ -98,13 +94,11 @@ public class DependencyBasedPredicateAnnotatorTest
                 predicatesFound++;
 
                 /* test verb */
-                assertEquals(expectedPredicateLemma, predicate.getVerbLemma());
                 assertEquals(expectedBegin, predicate.getVerbBegin());
                 assertEquals(expectedEnd, predicate.getVerbEnd());
 
                 /* test particle */
                 assertTrue(predicate.getHasParticle());
-                assertEquals(expectedParticle, predicate.getParticleText());
                 assertEquals(expectedParticleBegin, predicate.getParticleBegin());
                 assertEquals(expectedParticleEnd, predicate.getParticleEnd());
             }
