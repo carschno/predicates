@@ -15,6 +15,12 @@ import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 
+/**
+ * Annotate predicates for each sentence based on part-of-speech tags.
+ *
+ * @author Carsten Schnober
+ *
+ */
 public class PosBasedPredicateAnnotator
     extends JCasAnnotator_ImplBase
 {

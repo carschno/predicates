@@ -19,6 +19,12 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 
+/**
+ * Annotate predicates for each sentence based on dependency syntax parses.
+ *
+ * @author Carsten Schnober
+ *
+ */
 public class DependencyBasedPredicateAnnotator
     extends JCasAnnotator_ImplBase
 {
