@@ -25,7 +25,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 public class PosBasedPredicateAnnotator
     extends JCasAnnotator_ImplBase
 {
-    private static final String PRED_POS_TAG = "VVFIN";
+    public static final String PRED_POS_TAG = "VVFIN";
     private static final String PARTICLE_POS_TAG = "PTKVZ";
 
     @Override

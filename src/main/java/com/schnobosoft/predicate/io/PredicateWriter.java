@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -44,16 +45,16 @@ public class PredicateWriter
     {
         super.initialize(context);
 
+        try {
+            writer = targetLocation == null ?
+                    new BufferedWriter(new OutputStreamWriter(System.out)) :
+                    new BufferedWriter(new FileWriter(targetLocation));
+        }
+        catch (IOException e) {
+            throw new ResourceInitializationException(e);
+        }
         if (targetLocation == null) {
             writer = new BufferedWriter(new OutputStreamWriter(System.out));
-        }
-        else {
-            try {
-                writer = new BufferedWriter(new FileWriter(targetLocation));
-            }
-            catch (IOException e) {
-                throw new ResourceInitializationException(e);
-            }
         }
     };
 
@@ -61,7 +62,6 @@ public class PredicateWriter
     public void collectionProcessComplete()
         throws AnalysisEngineProcessException
     {
-        super.collectionProcessComplete();
         try {
             writer.close();
         }
@@ -75,14 +75,22 @@ public class PredicateWriter
         throws AnalysisEngineProcessException
     {
         for (Sentence sentence : select(aJCas, Sentence.class)) {
-            for (Predicate predicate : selectCovered(Predicate.class, sentence)) {
-                String text = predicateText(aJCas, predicate);
-                try {
-                    writer.write(String.format("%s\t%s%n", sentence.getCoveredText(), text));
+            List<Predicate> predicateAnnotations = selectCovered(Predicate.class, sentence);
+
+            try {
+                if (predicateAnnotations.size() > 0) {
+                    for (Predicate predicate : predicateAnnotations) {
+                        String text = predicateText(aJCas, predicate);
+                        writer.write(String.format("%s\t%s%n", sentence.getCoveredText(), text));
+                    }
                 }
-                catch (IOException e) {
-                    throw new AnalysisEngineProcessException(e);
+                else {
+                    writer.write(String.format(
+                            "%s\t%s%n", sentence.getCoveredText(), "no predicate found"));
                 }
+            }
+            catch (IOException e) {
+                throw new AnalysisEngineProcessException(e);
             }
         }
     }

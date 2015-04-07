@@ -7,11 +7,14 @@ import java.util.List;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
+import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.util.Level;
 
+import com.schnobosoft.predicate.pos.PosBasedPredicateAnnotator;
 import com.schnobosoft.predicate.type.Predicate;
 
+import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
@@ -30,6 +33,17 @@ public class DependencyBasedPredicateAnnotator
 {
     private static final String PARTICLE_TYPE = "SVP";
 
+    /**
+     * Only accept predicates with matching POS tag. Defaults to
+     * {@link PosBasedPredicateAnnotator#PRED_POS_TAG} ("VVFIN").
+     * <p>
+     * Set to empty string to avoid pos-based filtering (e.g. when POS tags are not available or
+     * unreliable).
+     */
+    public static final String PARAM_POS_TYPE = "posType";
+    @ConfigurationParameter(name = PARAM_POS_TYPE, mandatory = true, defaultValue = PosBasedPredicateAnnotator.PRED_POS_TAG)
+    private String posType;
+
     @Override
     public void process(JCas aJCas)
         throws AnalysisEngineProcessException
@@ -45,9 +59,15 @@ public class DependencyBasedPredicateAnnotator
                 /* find root node */
                 if (dependencies.isEmpty()) {
                     assert !hasPredicate;
-                    hasPredicate = true;
-                    predicate.setVerbBegin(token.getBegin());
-                    predicate.setVerbEnd(token.getEnd());
+
+                    if (!posType.isEmpty() && selectCovered(POS.class, token).stream()
+                            .findFirst()
+                            .filter(pos -> pos.getPosValue().equals(posType))
+                            .isPresent()) {
+                        hasPredicate = true;
+                        predicate.setVerbBegin(token.getBegin());
+                        predicate.setVerbEnd(token.getEnd());
+                    }
                 }
                 else {
                     /* find particle */
@@ -71,5 +91,4 @@ public class DependencyBasedPredicateAnnotator
             }
         }
     }
-
 }
